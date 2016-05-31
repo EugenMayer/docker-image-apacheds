@@ -32,7 +32,3 @@ You find the logs under ```/var/lib/apacheds-2.0.0_M20/default/log/apacheds.log`
 cd make
 make build
 ```
-
-## TODO/Hints
-
-We use apacheds M19 since the current apachestudio version ( m10 ) is not able to configure a >m19 server properly, see [this](https://issues.apache.org/jira/browse/DIRSTUDIO-1045) 
