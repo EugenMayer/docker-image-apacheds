@@ -38,7 +38,8 @@ else
    #rm -fr /tmp/config.ldif
 fi
 
-if [ -f /certs/fullchain.pem -a -f /certs/privkey.pem ]; then
+if [ -f /certs/fullchain.pem -a -f /certs/privkey.pem -a ! -f $DS_KEYSTORE_PATH ]; then
+	echo "Packing certificates into keychain format for apacheds"
 	/usr/local/bin/create_keystore.sh
 fi
 

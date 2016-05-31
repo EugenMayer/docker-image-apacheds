@@ -1,6 +1,7 @@
 #!/bin/bash
 
-DOMAIN='auth.kw.kontextwork.com'
-openssl pkcs12 -export -in fullchain.pem -inkey privkey.pem -out temp.p12 -name "$DOMAIN" -passout pass:changeit
-keytool -importkeystore -deststorepass changeit -destkeypass changeit -destkeystore apacheds.keystore -srckeystore temp.p12 -srcstoretype PKCS12 -alias "$DOMAIN" -srcstorepass "changeit"
+# uses the private key and certicate and adds them into a keychain which will be used by apacheds
+cd /certs
+openssl pkcs12 -export -in fullchain.pem -inkey privkey.pem -out temp.p12 -name "$DS_HOST" -passout pass:changeit
+keytool -importkeystore -deststorepass changeit -destkeypass changeit -destkeystore apacheds.keystore -srckeystore temp.p12 -srcstoretype PKCS12 -alias "$DS_HOST" -srcstorepass "changeit"
 rm temp.p12
