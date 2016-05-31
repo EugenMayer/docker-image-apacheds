@@ -35,6 +35,7 @@ For now, Kerberos is disabled, but configure the REALM and BaseDN
 
 Import default data
 + BOOTSTRAP_FILE: "/bootstrap/data.ldif" 
+
 #### b) or using your own configuration
 If you mount a folder with a config.ldif into /bootstrap, so /bootstrap/config.ldif, this file will be picked up
 during the initial bootstrapped and imported as the configuration for apacheds. This way you can import your very own configuration
