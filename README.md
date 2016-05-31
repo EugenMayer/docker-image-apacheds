@@ -50,8 +50,7 @@ To add encryption, all you need is (also test/docker-compose.yml):
 During the start, the key and certificate will be added to a keystore (/certs/apacheds.keystore), so apacheDS can consume this
 
 ### Data persistence
-To persist your data, please mount volume on /data
-
+To persist your data, please mount a volume on /data
 
 ### Importing your default data
 To import your default entrys, add a file to your mounted /bootstrap/data.ldif and set the ENV variable BOOTSTRAP_FILE.
