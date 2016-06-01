@@ -47,7 +47,7 @@ To add encryption, all you need is (also test/docker-compose.yml):
 + Mount a volume to /certs (see test/docker-compose.yml)
 + The folder you mount should include a fullchain.pem (certificate) and a privkey.pem ( private key ) file
 
-During the start, the key and certificate will be added to a keystore (/certs/apacheds.keystore), so apacheDS can consume this
+During the start, the key and certificate will be added to a keystore (/boostrap/apacheds.keystore), so apacheDS can consume this
 
 ### Data persistence
 To persist your data, please mount a volume on /data
