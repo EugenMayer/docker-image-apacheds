@@ -15,7 +15,7 @@ ADD build/apacheds.sh /usr/local/bin/
 ADD build/config.ldif /tmp/config.tpl.ldif
 ADD build/create_config.sh /usr/local/bin/
 ADD build/create_keystore.sh /usr/local/bin/
-
+ADD build/wrapper-instance.conf /local_conf/wrapper-instance.conf
 RUN chmod +x /usr/local/bin/apacheds.sh \
   && chmod +x /usr/local/bin/create_keystore.sh \
   && chmod +x /usr/local/bin/create_config.sh

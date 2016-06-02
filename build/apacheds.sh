@@ -48,6 +48,8 @@ if [ -f $CUSTOM_CONFIG ] && [ ! -f $CONFIG_SEMAPHORON ]; then
 	cleanup_config
 	cp $CUSTOM_CONFIG ${APACHEDS_INSTANCE}/conf/config.ldif
 	chown apacheds.apacheds ${APACHEDS_INSTANCE}/conf/config.ldif
+	chown apacheds.apacheds -R ${APACHEDS_INSTANCE}/partitions
+	cp /local_conf/wrapper-instance.conf ${APACHEDS_INSTANCE}/conf/wrapper-instance.conf
 	touch $CONFIG_SEMAPHORON
 else
 	if [ ! -f $CONFIG_SEMAPHORON ]; then
@@ -62,8 +64,12 @@ else
 
 	   chown apacheds.apacheds ${APACHEDS_INSTANCE}/conf/config.ldif
 	   chown apacheds.apacheds -R ${APACHEDS_INSTANCE}/partitions
+	   cp /local_conf/wrapper-instance.conf ${APACHEDS_INSTANCE}/conf/wrapper-instance.conf
 	   touch $CONFIG_SEMAPHORON
    else
+   	   if [ ! -f ${APACHEDS_INSTANCE}/conf/wrapper-instance.conf ]; then
+   	       cp /local_conf/wrapper-instance.conf ${APACHEDS_INSTANCE}/conf/wrapper-instance.conf
+   	   fi
 	   echo "Not touching configuration, since it has been imported before. Remove $CONFIG_SEMAPHORON to re-import the configuration (replacing the current)"
    fi
 fi
