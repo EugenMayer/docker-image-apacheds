@@ -22,6 +22,7 @@ function wait_for_ldap {
 
     	netstat -na|grep LISTEN|grep 10389
     done
+    echo "ApacheDS up and running"
 }
 
 

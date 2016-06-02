@@ -3,7 +3,7 @@ FROM centos:7
 MAINTAINER "Greg Gigon @ https://github.com/greggigon"
 
 # http://mirror.netcologne.de/apache.org//directory/apacheds/dist/2.0.0-M21/apacheds-2.0.0-M21-x86_64.rpm
-RUN yum -y update && yum -y install openssl java-1.7.0-openjdk openldap-clients && curl -s http://mirror.netcologne.de/apache.org//directory/apacheds/dist/2.0.0-M21/apacheds-2.0.0-M21-x86_64.rpm -o /tmp/apacheds.rpm \
+RUN yum -y update && yum -y install net-tools openssl java-1.7.0-openjdk openldap-clients && curl -s http://mirror.netcologne.de/apache.org//directory/apacheds/dist/2.0.0-M21/apacheds-2.0.0-M21-x86_64.rpm -o /tmp/apacheds.rpm \
 	&& yum -y localinstall /tmp/apacheds.rpm && rm -rf /tmp/apacheds.rpm && mkdir -p /bootstrap \
 	&& ln -s /var/lib/apacheds-2.0.0_M21/default/partitions /data \
 	&& chown -R apacheds.apacheds /data && chown -R apacheds.apacheds /var/lib/apacheds-2.0.0_M21/default/partitions
