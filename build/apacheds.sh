@@ -50,7 +50,7 @@ else
 	   cp /tmp/config.ldif ${APACHEDS_INSTANCE}/conf/
 	   chown apacheds.apacheds ${APACHEDS_INSTANCE}/conf/config.ldif
 	   rm -fr /tmp/config.ldif
-	   chown apacheds.apacheds ${APACHEDS_INSTANCE}/partitions
+	   chown apacheds.apacheds -R ${APACHEDS_INSTANCE}/partitions
 	   touch /bootstrap/.config_imported
    else
 	   echo "not touching configuration, since it has been imported before. Remove /bootstrap/.config_imported to retry this"
@@ -70,6 +70,7 @@ fi
 rm -f ${APACHEDS_INSTANCE}/run/apacheds-default.pid
 
 /opt/apacheds-$VERSION/bin/apacheds start default
+chown apacheds.apacheds -R ${APACHEDS_INSTANCE}/partitions
 
 wait_for_ldap
 
