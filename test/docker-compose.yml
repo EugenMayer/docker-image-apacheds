@@ -21,9 +21,12 @@ services:
     volumes:
       - ./certs:/certs
       - data:/data
-      - bootstrap:/data
+      - bootstrap:/bootstrap
+      - conf:/conf
 volumes:
   data:
     driver: local
   bootstrap:
+    driver: local
+  conf:
     driver: local
