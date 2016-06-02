@@ -16,4 +16,6 @@ if [ -f $DS_KEYSTORE_PATH ]; then
 	sed -e "s|TPL-KS-PATH|${DS_KEYSTORE_PATH}|" -i $DEST
 else
 	echo "WARNING: defined a keystore '$DS_KEYSTORE_PATH', but the file does not exist. Skipping configuration"
+	# remote the keystore path, otherwise the server wont start
+	sed -e "s|TPL-KS-PATH||" -i $DEST
 fi
