@@ -8,7 +8,7 @@ function wait_for_ldap {
 	echo "Waiting for LDAP to be available "
 	c=0
 
-    ldapsearch -h localhost -p 10389 -D 'uid=admin,ou=system' -w secret ou=system;
+    netstat -na|grep LISTEN|grep 10389
 
     while [ $? -ne 0 ]; do
         echo "LDAP not up yet... retrying... ($c/20)"
@@ -20,7 +20,7 @@ function wait_for_ldap {
  		fi
  		c=$((c+1))
 
-    	ldapsearch -h localhost -p 10389 -D 'uid=admin,ou=system' -w secret ou=system;
+    	netstat -na|grep LISTEN|grep 10389
     done
 }
 
@@ -73,11 +73,6 @@ rm -f ${APACHEDS_INSTANCE}/run/apacheds-default.pid
 chown apacheds.apacheds -R ${APACHEDS_INSTANCE}/partitions
 
 wait_for_ldap
-
-if [ -n "${BOOTSTRAP_FILE}" ]; then
-	echo "Bootstraping Apache DS with Data from ${BOOTSTRAP_FILE}"
-	ldapmodify -h localhost -p 10389 -D 'uid=admin,ou=system' -w secret -f $BOOTSTRAP_FILE
-fi
 
 trap "echo 'Stoping Apache DS';/opt/apacheds-$VERSION/bin/apacheds stop default;exit 0" SIGTERM SIGKILL
 
