@@ -30,6 +30,10 @@ function wait_for_ldap {
 if [ -f /certs/fullchain.pem -a -f /certs/privkey.pem -a ! -f $DS_KEYSTORE_PATH ]; then
 	echo "Packing certificates into keychain format for apacheds and saving it to $DS_KEYSTORE_PATH"
 	/usr/local/bin/create_keystore.sh
+else
+	if [ ! -f /certs/privkey.pem -o ! -f /certs/fullchain.pem ]; then
+	    echo "No certificates found, not configuring TLS"
+	fi
 fi
 
 # if the user provided a configuration, take it
@@ -54,7 +58,7 @@ else
 	   chown apacheds.apacheds -R ${APACHEDS_INSTANCE}/partitions
 	   touch $CONFIG_SEMAPHORON
    else
-	   echo "not touching configuration, since it has been imported before. Remove $CONFIG_SEMAPHORON to retry this"
+	   echo "Not touching configuration, since it has been imported before. Remove $CONFIG_SEMAPHORON to retry this"
    fi
 fi
 

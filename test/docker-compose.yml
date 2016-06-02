@@ -20,3 +20,10 @@ services:
       - "389:10389"
     volumes:
       - ./certs:/certs
+      - data:/data
+      - bootstrap:/data
+volumes:
+  data:
+    driver: local
+  bootstrap:
+    driver: local
