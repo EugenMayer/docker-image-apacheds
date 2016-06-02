@@ -3,7 +3,7 @@
 
 VERSION=2.0.0_M21
 APACHEDS_INSTANCE=/var/lib/apacheds-$VERSION/default
-
+CONFIG_SEMAPHORON=/data/config_imported
 function wait_for_ldap {
 	echo "Waiting for LDAP to be available "
 	c=0
@@ -33,12 +33,12 @@ if [ -f /certs/fullchain.pem -a -f /certs/privkey.pem -a ! -f $DS_KEYSTORE_PATH 
 fi
 
 # if the user provided a configuration, take it
-if [ -f /bootstrap/config.ldif ] && [ ! -f /bootstrap/.config_imported ]; then
+if [ -f /bootstrap/config.ldif ] && [ ! -f $CONFIG_SEMAPHORON ]; then
 	echo "Using config file from /bootstrap/config.ldif"
 	rm -rf ${APACHEDS_INSTANCE}/conf/config.ldif
 	cp /bootstrap/config.ldif ${APACHEDS_INSTANCE}/conf/
 	chown apacheds.apacheds ${APACHEDS_INSTANCE}/conf/config.ldif
-	touch /bootstrap/.config_imported
+	touch $CONFIG_SEMAPHORON
 else
 	if [ ! -f /bootstrap/.config_imported ]; then
 	   # otherwise use our template and fill in all the values from the ENV
@@ -52,9 +52,9 @@ else
 	   chown apacheds.apacheds ${APACHEDS_INSTANCE}/conf/config.ldif
 	   rm -fr /tmp/config.ldif
 	   chown apacheds.apacheds -R ${APACHEDS_INSTANCE}/partitions
-	   touch /bootstrap/.config_imported
+	   touch $CONFIG_SEMAPHORON
    else
-	   echo "not touching configuration, since it has been imported before. Remove /bootstrap/.config_imported to retry this"
+	   echo "not touching configuration, since it has been imported before. Remove $CONFIG_SEMAPHORON to retry this"
    fi
 fi
 
