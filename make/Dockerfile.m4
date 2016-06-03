@@ -16,6 +16,8 @@ ADD build/config.ldif /tmp/config.tpl.ldif
 ADD build/create_config.sh /usr/local/bin/
 ADD build/create_keystore.sh /usr/local/bin/
 ADD build/wrapper-instance.conf /local_conf/wrapper-instance.conf
+ADD build/log4j.properties /local_conf/log4j.properties
+
 RUN chmod +x /usr/local/bin/apacheds.sh \
   && chmod +x /usr/local/bin/create_keystore.sh \
   && chmod +x /usr/local/bin/create_config.sh
@@ -30,7 +32,6 @@ RUN rm -fr /var/lib/apacheds-2.0.0_M21/default/partitions/* \
 VOLUME /data
 VOLUME /bootstrap
 VOLUME /conf
-
 
 ENTRYPOINT /usr/local/bin/apacheds.sh
 EXPOSE 10389

@@ -32,6 +32,10 @@ function cleanup_config {
 	rm -fr ${APACHEDS_INSTANCE}/conf/'ou=config.ldif'
 }
 
+function redeploy_local_configuration {
+	cp /local_conf/wrapper-instance.conf ${APACHEDS_INSTANCE}/conf/wrapper-instance.conf && chown apacheds:apacheds ${APACHEDS_INSTANCE}/conf/wrapper-instance.conf
+	cp /local_conf/log4j.properties ${APACHEDS_INSTANCE}/conf/log4j.properties && chown apacheds:apacheds ${APACHEDS_INSTANCE}/conf/log4j.properties
+}
 # if certificates are available, pack them into a keystore, since thats what apacheds understands
 if [ -f /certs/fullchain.pem -a -f /certs/privkey.pem -a ! -f $DS_KEYSTORE_PATH ]; then
 	echo "Packing certificates into keychain format for apacheds and saving it to $DS_KEYSTORE_PATH"
@@ -49,7 +53,7 @@ if [ -f $CUSTOM_CONFIG ] && [ ! -f $CONFIG_SEMAPHORON ]; then
 	cp $CUSTOM_CONFIG ${APACHEDS_INSTANCE}/conf/config.ldif
 	chown apacheds.apacheds ${APACHEDS_INSTANCE}/conf/config.ldif
 	chown apacheds.apacheds -R ${APACHEDS_INSTANCE}/partitions
-	cp /local_conf/wrapper-instance.conf ${APACHEDS_INSTANCE}/conf/wrapper-instance.conf
+	redeploy_local_configuration
 	touch $CONFIG_SEMAPHORON
 else
 	if [ ! -f $CONFIG_SEMAPHORON ]; then
@@ -64,11 +68,11 @@ else
 
 	   chown apacheds.apacheds ${APACHEDS_INSTANCE}/conf/config.ldif
 	   chown apacheds.apacheds -R ${APACHEDS_INSTANCE}/partitions
-	   cp /local_conf/wrapper-instance.conf ${APACHEDS_INSTANCE}/conf/wrapper-instance.conf
+	   redeploy_local_configuration
 	   touch $CONFIG_SEMAPHORON
    else
    	   if [ ! -f ${APACHEDS_INSTANCE}/conf/wrapper-instance.conf ]; then
-   	       cp /local_conf/wrapper-instance.conf ${APACHEDS_INSTANCE}/conf/wrapper-instance.conf
+   	   		redeploy_local_configuration
    	   fi
 	   echo "Not touching configuration, since it has been imported before. Remove $CONFIG_SEMAPHORON to re-import the configuration (replacing the current)"
    fi

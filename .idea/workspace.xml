@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="12f6c1e7-ca5a-474d-86cd-35f70119f3e3" name="Default" comment="reworing configuration storage and import, removed default partition">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/wrapper-instance.conf" />
+    <list default="true" id="12f6c1e7-ca5a-474d-86cd-35f70119f3e3" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/log4j.properties" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/apacheds.sh" afterPath="$PROJECT_DIR$/build/apacheds.sh" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/make/Dockerfile.m4" afterPath="$PROJECT_DIR$/make/Dockerfile.m4" />
@@ -30,8 +30,8 @@
       <file leaf-file-name="Dockerfile.m4" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/make/Dockerfile.m4">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="17" column="32" selection-start-line="17" selection-start-column="32" selection-end-line="17" selection-end-column="65" />
+            <state relative-caret-position="561">
+              <caret line="34" column="0" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -93,18 +93,18 @@
       <file leaf-file-name="apacheds.sh" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/build/apacheds.sh">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="513">
-              <caret line="70" column="11" selection-start-line="70" selection-start-column="11" selection-end-line="70" selection-end-column="11" />
+            <state relative-caret-position="612">
+              <caret line="36" column="148" selection-start-line="36" selection-start-column="148" selection-end-line="36" selection-end-column="148" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/.gitignore">
+      <file leaf-file-name="log4j.properties" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/build/log4j.properties">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="28" selection-start-line="0" selection-start-column="28" selection-end-line="0" selection-end-column="28" />
+            <state relative-caret-position="659">
+              <caret line="45" column="33" selection-start-line="45" selection-start-column="33" selection-end-line="45" selection-end-column="33" />
               <folding />
             </state>
           </provider>
@@ -153,6 +153,7 @@
         <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/test/docker-compose.yml" />
         <option value="$PROJECT_DIR$/build/wrapper-instance.conf" />
+        <option value="$PROJECT_DIR$/build/log4j.propert ies" />
         <option value="$PROJECT_DIR$/make/Dockerfile.m4" />
         <option value="$PROJECT_DIR$/build/apacheds.sh" />
       </list>
@@ -892,7 +893,7 @@
       <workItem from="1464762254806" duration="2000" />
       <workItem from="1464762266181" duration="1458000" />
       <workItem from="1464810038399" duration="2880000" />
-      <workItem from="1464891045821" duration="15073000" />
+      <workItem from="1464891045821" duration="15644000" />
     </task>
     <task id="LOCAL-00001" summary="fixed configuration reloading&#10;fixed cert creation being to late, fixed keystore path">
       <created>1464812681072</created>
@@ -957,11 +958,18 @@
       <option name="project" value="LOCAL" />
       <updated>1464910584152</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="ensure we preserve wrapper-instance.conf since we mount the configuration folder">
+      <created>1464911858430</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1464911858430</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="29768000" />
+    <option name="totallyTimeSpent" value="30339000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1920" height="986" extended-state="6" />
@@ -1018,21 +1026,14 @@
     <MESSAGE value="move semaphoron the data-storage, its to sensible" />
     <MESSAGE value="use named volumes. Better messages on certificates missing" />
     <MESSAGE value="reworing configuration storage and import, removed default partition&#10;Updated docs and tests, a lot fo down/up remake and reboot test to harden for production" />
-    <option name="LAST_COMMIT_MESSAGE" value="reworing configuration storage and import, removed default partition&#10;Updated docs and tests, a lot fo down/up remake and reboot test to harden for production" />
+    <MESSAGE value="ensure we preserve wrapper-instance.conf since we mount the configuration folder" />
+    <option name="LAST_COMMIT_MESSAGE" value="ensure we preserve wrapper-instance.conf since we mount the configuration folder" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/make/Dockerfile.m4">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="44" selection-start-line="5" selection-start-column="44" selection-end-line="5" selection-end-column="44" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="34">
@@ -1415,10 +1416,10 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test/docker-compose.yml">
+    <entry file="file://$PROJECT_DIR$/build/log4j.properties">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="24" column="6" selection-start-line="24" selection-start-column="6" selection-end-line="24" selection-end-column="18" />
+        <state relative-caret-position="659">
+          <caret line="45" column="33" selection-start-line="45" selection-start-column="33" selection-end-line="45" selection-end-column="33" />
           <folding />
         </state>
       </provider>
@@ -1433,16 +1434,24 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/make/Dockerfile.m4">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="17" column="32" selection-start-line="17" selection-start-column="32" selection-end-line="17" selection-end-column="65" />
+        <state relative-caret-position="561">
+          <caret line="34" column="0" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/docker-compose.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="408">
+          <caret line="24" column="6" selection-start-line="24" selection-start-column="6" selection-end-line="24" selection-end-column="18" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/build/apacheds.sh">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="513">
-          <caret line="70" column="11" selection-start-line="70" selection-start-column="11" selection-end-line="70" selection-end-column="11" />
+        <state relative-caret-position="612">
+          <caret line="36" column="148" selection-start-line="36" selection-start-column="148" selection-end-line="36" selection-end-column="148" />
           <folding />
         </state>
       </provider>
