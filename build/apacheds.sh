@@ -82,7 +82,7 @@ else
    	   		redeploy_local_wrapper_instance
    	   fi
    	   if [ ! -f ${APACHEDS_INSTANCE}/conf/log4j.properties ]; then
-   	   		redeploy_local_wrapper_instance
+   	   		redeploy_local_log4j
    	   fi
 	   echo "Not touching configuration, since it has been imported before. Remove $CONFIG_SEMAPHORON to re-import the configuration (replacing the current)"
    fi
