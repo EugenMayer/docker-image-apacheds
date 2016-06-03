@@ -32,8 +32,13 @@ function cleanup_config {
 	rm -fr ${APACHEDS_INSTANCE}/conf/'ou=config.ldif'
 }
 
-function redeploy_local_configuration {
+function redeploy_local_wrapper_instance {
+	echo "Redploying local configuration wrapper-instance.conf"
 	cp /local_conf/wrapper-instance.conf ${APACHEDS_INSTANCE}/conf/wrapper-instance.conf && chown apacheds:apacheds ${APACHEDS_INSTANCE}/conf/wrapper-instance.conf
+}
+
+function redeploy_local_log4j {
+	echo "Redploying local configuration log4j.properties"
 	cp /local_conf/log4j.properties ${APACHEDS_INSTANCE}/conf/log4j.properties && chown apacheds:apacheds ${APACHEDS_INSTANCE}/conf/log4j.properties
 }
 # if certificates are available, pack them into a keystore, since thats what apacheds understands
@@ -53,7 +58,8 @@ if [ -f $CUSTOM_CONFIG ] && [ ! -f $CONFIG_SEMAPHORON ]; then
 	cp $CUSTOM_CONFIG ${APACHEDS_INSTANCE}/conf/config.ldif
 	chown apacheds.apacheds ${APACHEDS_INSTANCE}/conf/config.ldif
 	chown apacheds.apacheds -R ${APACHEDS_INSTANCE}/partitions
-	redeploy_local_configuration
+	redeploy_local_wrapper_instance
+	redeploy_local_log4j
 	touch $CONFIG_SEMAPHORON
 else
 	if [ ! -f $CONFIG_SEMAPHORON ]; then
@@ -68,11 +74,15 @@ else
 
 	   chown apacheds.apacheds ${APACHEDS_INSTANCE}/conf/config.ldif
 	   chown apacheds.apacheds -R ${APACHEDS_INSTANCE}/partitions
-	   redeploy_local_configuration
+	   redeploy_local_wrapper_instance
+	   redeploy_local_log4j
 	   touch $CONFIG_SEMAPHORON
    else
    	   if [ ! -f ${APACHEDS_INSTANCE}/conf/wrapper-instance.conf ]; then
-   	   		redeploy_local_configuration
+   	   		redeploy_local_wrapper_instance
+   	   fi
+   	   if [ ! -f ${APACHEDS_INSTANCE}/conf/log4j.properties ]; then
+   	   		redeploy_local_wrapper_instance
    	   fi
 	   echo "Not touching configuration, since it has been imported before. Remove $CONFIG_SEMAPHORON to re-import the configuration (replacing the current)"
    fi
