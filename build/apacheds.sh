@@ -1,12 +1,14 @@
 #!/bin/bash
+# derived from the work here https://github.com/greggigon/apacheds thank you!
 VERSION=2.0.0_M21
 APACHEDS_INSTANCE=/var/lib/apacheds-$VERSION/default
-
+CONFIG_SEMAPHORON=/bootstrap/config_imported
+CUSTOM_CONFIG=/bootstrap/config.ldif
 function wait_for_ldap {
 	echo "Waiting for LDAP to be available "
 	c=0
 
-    ldapsearch -h localhost -p 10389 -D 'uid=admin,ou=system' -w secret ou=system;
+    netstat -na|grep LISTEN|grep 10389
 
     while [ $? -ne 0 ]; do
         echo "LDAP not up yet... retrying... ($c/20)"
@@ -18,31 +20,75 @@ function wait_for_ldap {
  		fi
  		c=$((c+1))
 
-    	ldapsearch -h localhost -p 10389 -D 'uid=admin,ou=system' -w secret ou=system;
+    	netstat -na|grep LISTEN|grep 10389
     done
+    echo "ApacheDS up and running"
 }
 
-if [ -f /bootstrap/config.ldif ] && [ ! -f ${APACHEDS_INSTANCE}/conf/config.ldif_migrated ]; then
-	echo "Using config file from /bootstrap/config.ldif"
+function cleanup_config {
 	rm -rf ${APACHEDS_INSTANCE}/conf/config.ldif
+	rm -fr ${APACHEDS_INSTANCE}/conf/config.ldif_migrated
+	rm -rf ${APACHEDS_INSTANCE}/conf/ou=config
+	rm -fr ${APACHEDS_INSTANCE}/conf/'ou=config.ldif'
+}
 
-	cp /bootstrap/config.ldif ${APACHEDS_INSTANCE}/conf/
-	chown apacheds.apacheds ${APACHEDS_INSTANCE}/conf/config.ldif
-else
-   echo "Generating config from template"
-   /usr/local/bin/create_config.sh
-   rm -rf ${APACHEDS_INSTANCE}/conf/config.ldif
-   rm -fr ${APACHEDS_INSTANCE}/conf/'ou=config.ldif'
-   cp /tmp/config.ldif ${APACHEDS_INSTANCE}/conf/
-   chown apacheds.apacheds ${APACHEDS_INSTANCE}/conf/config.ldif
-   #rm -fr /tmp/config.ldif
-fi
+function redeploy_local_wrapper_instance {
+	echo "Redploying local configuration wrapper-instance.conf"
+	cp /local_conf/wrapper-instance.conf ${APACHEDS_INSTANCE}/conf/wrapper-instance.conf && chown apacheds:apacheds ${APACHEDS_INSTANCE}/conf/wrapper-instance.conf
+}
 
+function redeploy_local_log4j {
+	echo "Redploying local configuration log4j.properties"
+	cp /local_conf/log4j.properties ${APACHEDS_INSTANCE}/conf/log4j.properties && chown apacheds:apacheds ${APACHEDS_INSTANCE}/conf/log4j.properties
+}
+# if certificates are available, pack them into a keystore, since thats what apacheds understands
 if [ -f /certs/fullchain.pem -a -f /certs/privkey.pem -a ! -f $DS_KEYSTORE_PATH ]; then
-	echo "Packing certificates into keychain format for apacheds"
+	echo "Packing certificates into keychain format for apacheds and saving it to $DS_KEYSTORE_PATH"
 	/usr/local/bin/create_keystore.sh
+else
+	if [ ! -f /certs/privkey.pem -o ! -f /certs/fullchain.pem ]; then
+	    echo "No certificates found, not configuring TLS"
+	fi
 fi
 
+# if the user provided a configuration, take it
+if [ -f $CUSTOM_CONFIG ] && [ ! -f $CONFIG_SEMAPHORON ]; then
+	echo "Using config file from $CUSTOM_CONFIG"
+	cleanup_config
+	cp $CUSTOM_CONFIG ${APACHEDS_INSTANCE}/conf/config.ldif
+	chown apacheds.apacheds ${APACHEDS_INSTANCE}/conf/config.ldif
+	chown apacheds.apacheds -R ${APACHEDS_INSTANCE}/partitions
+	redeploy_local_wrapper_instance
+	redeploy_local_log4j
+	touch $CONFIG_SEMAPHORON
+else
+	if [ ! -f $CONFIG_SEMAPHORON ]; then
+	   # otherwise use our template and fill in all the values from the ENV
+	   echo "Generating config from template"
+	   cleanup_config
+	   /usr/local/bin/create_config.sh
+	   cp /tmp/config.ldif ${APACHEDS_INSTANCE}/conf/
+
+	   # no persist our generated config for reimports
+	   mv /tmp/config.ldif /bootstrap/config.ldif
+
+	   chown apacheds.apacheds ${APACHEDS_INSTANCE}/conf/config.ldif
+	   chown apacheds.apacheds -R ${APACHEDS_INSTANCE}/partitions
+	   redeploy_local_wrapper_instance
+	   redeploy_local_log4j
+	   touch $CONFIG_SEMAPHORON
+   else
+   	   if [ ! -f ${APACHEDS_INSTANCE}/conf/wrapper-instance.conf ]; then
+   	   		redeploy_local_wrapper_instance
+   	   fi
+   	   if [ ! -f ${APACHEDS_INSTANCE}/conf/log4j.properties ]; then
+   	   		redeploy_local_log4j
+   	   fi
+	   echo "Not touching configuration, since it has been imported before. Remove $CONFIG_SEMAPHORON to re-import the configuration (replacing the current)"
+   fi
+fi
+
+# custom schema available, use it
 if [ -d /bootstrap/schema ]; then
 	echo "Using schema from /bootstrap/schema directory"
 	rm -rf ${APACHEDS_INSTANCE}/partitions/schema
@@ -55,15 +101,9 @@ fi
 rm -f ${APACHEDS_INSTANCE}/run/apacheds-default.pid
 
 /opt/apacheds-$VERSION/bin/apacheds start default
+chown apacheds.apacheds -R ${APACHEDS_INSTANCE}/partitions
 
 wait_for_ldap
-
-
-if [ -n "${BOOTSTRAP_FILE}" ]; then
-	echo "Bootstraping Apache DS with Data from ${BOOTSTRAP_FILE}"
-
-	ldapmodify -h localhost -p 10389 -D 'uid=admin,ou=system' -w secret -f $BOOTSTRAP_FILE
-fi
 
 trap "echo 'Stoping Apache DS';/opt/apacheds-$VERSION/bin/apacheds stop default;exit 0" SIGTERM SIGKILL
 

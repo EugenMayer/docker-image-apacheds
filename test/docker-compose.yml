@@ -13,10 +13,20 @@ services:
       DS_PARTITION1_SUFFIX: "dc=example,dc=dev"
       DS_KRB_REALM: "EXAMPLE.DEV"
       DS_KRB_BASEDN: "dc=example,dc=dev"
-      DS_KEYSTORE_PATH: "/certs/apacheds.keystore"
+      DS_KEYSTORE_PATH: /bootstrap/apacheds.keystore
     tty: true
     stdin_open: true
     ports:
       - "389:10389"
     volumes:
       - ./certs:/certs
+      - data:/data
+      - bootstrap:/bootstrap
+      - conf:/conf
+volumes:
+  data:
+    driver: local
+  bootstrap:
+    driver: local
+  conf:
+    driver: local

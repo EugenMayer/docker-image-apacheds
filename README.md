@@ -11,9 +11,23 @@ Docker images will be published on [hub.docker.io](https://hub.docker.com/r/euge
 
 For now, only planed to be published on [hub.docker.io](https://hub.docker.com/r/eugenmayer/apacheds/)
 
+## Data
+
+**IMPORTANT: Data is stored under /data - mount this on a named volume or the host to persist your date**
+
 ## Configuration
 
 ### DS Configuration
+
+**IMPORTANT: Live-Configuration is stored under /confg - mount this on a named volume or the host**
+The configuration will be stored on /conf and will persist on your volume. You can savely recreate the container, it will confgure automatically
+
+**IMPORTANT: Bootstate is stored under /bootstrap - mount this on a named volume or the host**
+Here you can either store your own config which gets imported once during the start of the start.
+Then, the conf stored under /conf is used
+
+To reimport your configuration once again, remove /bootstrap/config_imported and restart the container. This WILL REMOVE YOUR LIVE CONFIGURATION
+
 #### a) Using the included template
 You can configure the server using environment-variables. See the test/docker-compose.yml file for further informations or even this detailed (descriptions)[https://github.com/EugenMayer/kontextwork-catalog/tree/master/templates/apacheds/0/rancher-compose.yml]
 
@@ -25,20 +39,15 @@ General Settings for SASL, see the [docs](http://directory.apache.org/apacheds/a
 + DS_SASL_DOMAIN: "EXAMPLE.DEV"
 + DS_SASL_BASEDN: "dc=example,dc=dev"
 
-The inital partion / DN to create, like dc=youcompany,dc=com
-+ DS_PARTITION1_ID: "devexample"
-+ DS_PARTITION1_SUFFIX: "dc=example,dc=dev"
-
 For now, Kerberos is disabled, but configure the REALM and BaseDN
 + DS_KRB_REALM: "EXAMPLE.DEV"
 + DS_KRB_BASEDN: "dc=example,dc=dev"
 
-Import default data
-+ BOOTSTRAP_FILE: "/bootstrap/data.ldif" 
-
 #### b) or using your own configuration
 If you mount a folder with a config.ldif into /bootstrap, so /bootstrap/config.ldif, this file will be picked up
-during the initial bootstrapped and imported as the configuration for apacheds. This way you can import your very own configuration
+during the initial bootstrapped and imported as the configuration for apacheds. This way you can import your very own configuration.
+If you already started the server once, you have to remove /bootstrap/config_imported first, then restart once again - your configuration
+will now get imported.
 
 ### Configure TLS/startTLS
 
@@ -47,7 +56,7 @@ To add encryption, all you need is (also test/docker-compose.yml):
 + Mount a volume to /certs (see test/docker-compose.yml)
 + The folder you mount should include a fullchain.pem (certificate) and a privkey.pem ( private key ) file
 
-During the start, the key and certificate will be added to a keystore (/certs/apacheds.keystore), so apacheDS can consume this
+During the start, the key and certificate will be added to a keystore (/boostrap/apacheds.keystore), so apacheDS can consume this
 
 ### Data persistence
 To persist your data, please mount a volume on /data
