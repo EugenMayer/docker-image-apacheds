@@ -73,7 +73,7 @@ You need to add portus.dev and registry.dev to your /etc/hosts file and point it
 
 ## Logs
 
-You find the logs under ```/var/lib/apacheds-2.0.0_M20/default/log/apacheds.log```
+You find the logs under ```/var/lib/apacheds-2.0.0_M21/default/log/apacheds.log```
 ## Build
 
 ```
