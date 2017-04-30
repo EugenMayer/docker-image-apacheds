@@ -1,6 +1,6 @@
 #!/bin/bash
 # derived from the work here https://github.com/greggigon/apacheds thank you!
-VERSION=2.0.0_M21
+VERSION=2.0.0_M23
 APACHEDS_INSTANCE=/var/lib/apacheds-$VERSION/default
 CONFIG_SEMAPHORON=/bootstrap/config_imported
 CUSTOM_CONFIG=/bootstrap/config.ldif
